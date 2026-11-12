@@ -2,11 +2,11 @@ import sys
 import subprocess
 import os
 
-# CONFIG 
-download_folder = "download"
+# CONFIG: Saves downloads directly to a 'MediaDownloads' folder on your Windows Desktop
+download_folder = os.path.join(os.path.expanduser("~"), "Desktop", "MediaDownloads")
 os.makedirs(download_folder, exist_ok=True)
 
-# Use sys.executable and -m yt_dlp to prevent FileNotFoundError on Windows
+# Use the current Python interpreter to invoke yt-dlp safely
 YT_DLP_CMD = [sys.executable, "-m", "yt_dlp"]
 
 # FUNCTIONS
@@ -69,7 +69,7 @@ def download_selected_video(url):
     subprocess.run(
         YT_DLP_CMD + ["-f", format_id, "-o", f"{download_folder}/%(title)s.%(ext)s", url]
     )
-    print("Download completed!")
+    print(f"\nDownload completed! Saved to: {download_folder}")
 
 def download_selected_audio(url):
     if not show_audio_formats(url):
@@ -92,8 +92,9 @@ def download_selected_audio(url):
             url
         ]
     )
-    print("Download completed!")
+    print(f"\nDownload completed! Saved to: {download_folder}")
 
+# MAIN PROGRAM
 print("** Simple Media Downloader **")
 url = get_valid_url()
 while True:
